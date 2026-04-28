@@ -1,0 +1,72 @@
+﻿@{
+    ViewData["Title"] = "Carrito";
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+<section class="carrito-container">
+
+    <h2>Tu carrito</h2>
+
+    <div id="carrito"></div>
+
+    <h3>Total: $<span id="totalGeneral">0</span></h3>
+
+    <button onclick="vaciarCarrito()">Vaciar carrito</button>
+
+</section><br />
+<a href="/Pago" class="btn-enviar">Ir a pagar</a>
+
+<script>
+
+    // CARGAR CARRITO
+    function cargarCarrito() {
+
+        let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
+
+        let contenedor = document.getElementById("carrito");
+        contenedor.innerHTML = "";
+
+        let total = 0;
+
+        carrito.forEach((p, index) => {
+
+            total += parseInt(p.precio);
+
+            contenedor.innerHTML += `
+                <div class="item-carrito">
+                    <h4>${p.nombre}</h4>
+                    <p>$${p.precio}</p>
+
+                    <small>${p.ingredientes.join(", ")}</small><br>
+                    <small>${p.extras.join(", ")}</small><br>
+
+                    <button onclick="eliminar(${index})">Eliminar</button>
+                </div>
+            `;
+        });
+
+        document.getElementById("totalGeneral").innerText = total;
+    }
+
+    // ELIMINAR PRODUCTO
+    function eliminar(index) {
+        let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
+
+        carrito.splice(index, 1);
+
+        sessionStorage.setItem("carrito", JSON.stringify(carrito));
+
+        cargarCarrito();
+    }
+
+    // VACIAR
+    function vaciarCarrito() {
+        sessionStorage.removeItem("carrito");
+        cargarCarrito();
+    }
+
+    // INICIAL
+    cargarCarrito();
+
+</script>

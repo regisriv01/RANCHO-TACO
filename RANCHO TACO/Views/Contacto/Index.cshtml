@@ -1,0 +1,96 @@
+﻿@model RANCHO_TACO.Models.Resena
+
+@{
+    ViewData["Title"] = "Contáctanos";
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+<section class="contact-wrapper">
+
+    <!-- =========================
+         FORMULARIO
+    ========================= -->
+    <div class="contact-card">
+
+        <h2>Déjanos tu reseña</h2>
+        <p class="subtitle">Tu opinión nos ayuda a mejorar</p>
+
+        <form method="post" asp-action="Guardar">
+
+            <!-- NOMBRE -->
+            <div class="form-group">
+                <label>Nombre</label>
+                <input asp-for="Nombre" placeholder="Ej. Juan Pérez" />
+                <span asp-validation-for="Nombre" class="error"></span>
+            </div>
+
+            <!-- COMENTARIO -->
+            <div class="form-group">
+                <label>Reseña</label>
+                <textarea asp-for="Comentario" placeholder="¿Qué te pareció la comida?"></textarea>
+                <span asp-validation-for="Comentario" class="error"></span>
+            </div>
+
+            <!-- CALIFICACIÓN -->
+            <div class="form-group">
+                <label>Calificación</label>
+
+                <div class="stars">
+                    <label><input type="radio" asp-for="Calificacion" value="5"> ⭐⭐⭐⭐⭐</label>
+                    <label><input type="radio" asp-for="Calificacion" value="4"> ⭐⭐⭐⭐</label>
+                    <label><input type="radio" asp-for="Calificacion" value="3"> ⭐⭐⭐</label>
+                    <label><input type="radio" asp-for="Calificacion" value="2"> ⭐⭐</label>
+                    <label><input type="radio" asp-for="Calificacion" value="1"> ⭐</label>
+                </div>
+
+                <span asp-validation-for="Calificacion" class="error"></span>
+            </div>
+
+            <!-- BOTÓN -->
+            <button type="submit" class="btn-enviar">
+                Enviar reseña
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- =========================
+         REDES SOCIALES
+    ========================= -->
+    <div class="contact-card redes-card">
+
+        <h2>Síguenos</h2>
+        <p class="subtitle">Conecta con nosotros</p>
+
+        <div class="redes-list">
+
+            <!-- INSTAGRAM -->
+            <a href="https://teams.microsoft.com/l/message/19:c937e289-6aa4-49cd-a4aa-f7fb7cea61c2_def7a649-9e92-4c0f-b6ce-05977d976848@unq.gbl.spaces/1777210652211?context=%7B%22contextType%22%3A%22chat%22%7D" target="_blank" class="red social-instagram">
+                <i class="fab fa-instagram"></i>
+                <span>Instagram</span>
+            </a>
+
+            <!-- WHATSAPP -->
+            <a href="https://wa.me/528994691208" target="_blank" class="red social-whatsapp">
+                <i class="fab fa-whatsapp"></i>
+                <span>WhatsApp</span>
+            </a>
+
+        </div>
+
+        <hr />
+
+        <h3>Contacto directo</h3>
+
+        <p><i class="fas fa-location-dot"></i> Reynosa, Tamaulipas</p>
+        <p><i class="fas fa-phone"></i> 8994691208</p>
+
+    </div>
+
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

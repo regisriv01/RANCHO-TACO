@@ -1,0 +1,229 @@
+﻿@model List<RANCHO_TACO.Models.Producto>
+
+@{
+    ViewData["Title"] = "Inicio";
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+<!-- HERO -->
+<header class="hero-slider">
+    <div class="slider-container">
+        <img src="~/images/promos/promo1.png" class="slide active">
+        <img src="~/images/promos/promo2.png" class="slide">
+        <img src="~/images/promos/promo3.png" class="slide">
+        <img src="~/images/promos/promo4.png" class="slide">
+    </div>
+</header>
+
+<!-- PRODUCTOS -->
+<section class="top-products">
+    <h2>Más vendidos</h2>
+
+    <div class="products">
+        @foreach (var item in Model)
+        {
+            <div class="product">
+
+                <img src="@item.ImagenUrl" class="product-img" />
+
+                <h3>@item.Nombre</h3>
+                <p>$@item.Precio</p>
+
+                <!-- BOTÓN NUEVO -->
+                <button onclick="abrirModal(@item.Id, '@item.Nombre', @item.Precio, '@item.Categoria')">
+                    Agregar
+                </button>
+
+            </div>
+        }
+    </div>
+</section>
+
+<!-- RESEÑAS DINÁMICAS -->
+<section class="reviews">
+    <h2>Reseñas</h2>
+
+    <div class="review-slider">
+        @if (ViewBag.Resenas != null)
+        {
+            foreach (var r in ViewBag.Resenas)
+            {
+                <div class="review-card">
+                    <h4>@r.Nombre</h4>
+                    <p>"@r.Comentario"</p>
+
+                    <div>
+                        @for (int i = 0; i < r.Calificacion; i++)
+                        {
+                            <span>⭐</span>
+                        }
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <p>No hay reseñas todavía.</p>
+        }
+    </div>
+</section>
+
+<!-- UBICACIÓN -->
+<section class="location">
+    <h2>Ubicación</h2>
+    <iframe src="https://maps.google.com/maps?q=Calle%20Presa%20Del%20Azucar%2C%20Reynosa%2C%20Tamaulipas&output=embed">
+    </iframe>
+</section>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+
+        <h2 id="productoTitulo"></h2>
+        <p id="precioBase"></p>
+
+        <h4>Ingredientes</h4>
+        <div id="ingredientes"></div>
+
+        <h4>Extras</h4>
+        <div id="extras"></div>
+
+        <h3>Total: $<span id="total">0</span></h3>
+
+        <button onclick="cerrarModal()">Cancelar</button>
+        <button onclick="guardarCarrito()">Agregar</button>
+
+    </div>
+</div>
+
+<!-- SCRIPT SLIDER HERO -->
+<script>
+    let slides = document.querySelectorAll(".slider-container img");
+    let index = 0;
+
+    setInterval(() => {
+        slides.forEach(s => s.classList.remove("active"));
+        slides[index].classList.add("active");
+
+        index++;
+        if (index >= slides.length) index = 0;
+
+    }, 5000);
+</script>
+
+<!-- SCRIPT RESEÑAS -->
+<script>
+    let reviewIndex = 0;
+
+    setInterval(() => {
+        let slider = document.querySelector(".review-slider");
+        if (!slider) return;
+
+        slider.scrollLeft += 300;
+
+        reviewIndex++;
+        if (reviewIndex > 3) {
+            slider.scrollLeft = 0;
+            reviewIndex = 0;
+        }
+
+    }, 3000);
+</script>
+
+<!-- SCRIPT MODAL + CARRITO -->
+<script>
+    let productoActual = {};
+
+    function abrirModal(id, nombre, precio, categoria) {
+
+        productoActual = { id, nombre, precio, categoria };
+
+        document.getElementById("modal").style.display = "flex";
+        document.getElementById("productoTitulo").innerText = nombre;
+        document.getElementById("precioBase").innerText = "Base: $" + precio;
+
+        let contIng = document.getElementById("ingredientes");
+        let contExt = document.getElementById("extras");
+
+        contIng.innerHTML = "";
+        contExt.innerHTML = "";
+
+        let ingredientes = [];
+        let extras = [];
+
+        if (categoria === "Tacos") {
+            ingredientes = ["Cilantro", "Cebolla", "Salsa", "Limón"];
+            extras = [{nombre:"Frijoles charros", precio:20}];
+        }
+        else if (categoria === "Tortas") {
+            ingredientes = ["Jamón", "Queso", "Mayonesa", "Lechuga"];
+        }
+        else if (categoria === "Papas") {
+            ingredientes = ["Queso", "Crema", "Mantequilla"];
+        }
+
+        ingredientes.forEach(i => {
+            contIng.innerHTML += `
+                <label>
+                    <input type="checkbox" checked value="${i}" onchange="calcularTotal()">
+                    ${i}
+                </label><br>
+            `;
+        });
+
+        extras.forEach(e => {
+            contExt.innerHTML += `
+                <label>
+                    <input type="checkbox" value="${e.precio}" onchange="calcularTotal()">
+                    ${e.nombre} (+$${e.precio})
+                </label><br>
+            `;
+        });
+
+        calcularTotal();
+    }
+
+    function calcularTotal() {
+        let total = productoActual.precio;
+
+        document.querySelectorAll("#extras input:checked")
+            .forEach(e => total += parseInt(e.value));
+
+        document.getElementById("total").innerText = total;
+    }
+
+    function cerrarModal() {
+        document.getElementById("modal").style.display = "none";
+    }
+
+    function guardarCarrito() {
+
+        let ingredientes = [];
+        let extras = [];
+
+        document.querySelectorAll("#ingredientes input:checked")
+            .forEach(i => ingredientes.push(i.value));
+
+        document.querySelectorAll("#extras input:checked")
+            .forEach(e => extras.push(e.parentElement.innerText));
+
+        let total = document.getElementById("total").innerText;
+
+        let producto = {
+            nombre: productoActual.nombre,
+            precio: total,
+            ingredientes,
+            extras
+        };
+
+        let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
+        carrito.push(producto);
+
+        sessionStorage.setItem("carrito", JSON.stringify(carrito));
+
+        console.log(carrito);
+
+        cerrarModal();
+    }
+</script>

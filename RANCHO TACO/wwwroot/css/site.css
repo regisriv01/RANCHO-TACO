@@ -1,0 +1,437 @@
+/* ======================================================
+   GENERAL
+====================================================== */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #b89272;
+}
+
+/* ======================================================
+   NAVBAR
+====================================================== */
+.navbar {
+    background: rgba(139, 0, 0, 0.95) !important;
+    backdrop-filter: blur(10px);
+    padding: 10px 20px;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+    .navbar .nav-link {
+        color: white !important;
+        font-weight: 500;
+        transition: 0.3s;
+    }
+
+        .navbar .nav-link:hover {
+            opacity: 0.8;
+        }
+
+.navbar-nav {
+    gap: 15px;
+}
+
+/* ======================================================
+   LOGO NAVBAR
+====================================================== */
+.navbar-brand {
+    display: flex;
+    align-items: center;
+}
+
+.logo-navbar {
+    height: 45px;
+    width: auto;
+    object-fit: contain;
+    transition: 0.3s;
+}
+
+    .logo-navbar:hover {
+        transform: scale(1.05);
+    }
+
+/* ======================================================
+   CARRITO (BADGE)
+====================================================== */
+.badge-carrito {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background: white;
+    color: #8b0000;
+    font-size: 10px;
+    padding: 3px 6px;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+/* ======================================================
+   SLIDER
+====================================================== */
+.hero-slider {
+    margin: 20px;
+}
+
+.slider-container {
+    position: relative;
+    height: 300px;
+    overflow: hidden;
+    border-radius: 25px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+}
+
+    .slider-container img {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        opacity: 0;
+        transition: opacity 1s ease-in-out;
+    }
+
+        .slider-container img.active {
+            opacity: 1;
+        }
+
+/* ======================================================
+   PRODUCTOS
+====================================================== */
+.top-products {
+    background: rgba(107, 88, 72, 0.95);
+    color: white;
+    padding: 40px;
+    margin: 30px;
+    border-radius: 25px;
+    backdrop-filter: blur(10px);
+}
+
+.products {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+
+/* ======================================================
+   TARJETAS PRODUCTO
+====================================================== */
+.product {
+    background: linear-gradient(145deg, #8b0000, #a30000);
+    border-radius: 20px;
+    width: 220px;
+    padding: 15px;
+    text-align: center;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
+    transition: all 0.3s ease;
+}
+
+    .product:hover {
+        transform: translateY(-10px) scale(1.03);
+    }
+
+.product-img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 15px;
+    transition: 0.4s;
+}
+
+.product:hover .product-img {
+    transform: scale(1.1);
+}
+
+.product h3 {
+    margin: 10px 0;
+}
+
+.product p {
+    font-size: 16px;
+}
+
+.product button {
+    background: white;
+    color: #8b0000;
+    border: none;
+    padding: 10px;
+    width: 100%;
+    border-radius: 12px;
+    margin-top: 10px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+    .product button:hover {
+        background: #ffd9d9;
+        transform: scale(1.05);
+    }
+
+/* ======================================================
+   MODAL
+====================================================== */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(6px);
+    justify-content: center;
+    align-items: flex-end;
+    z-index: 999;
+}
+
+.modal-content {
+    background: white;
+    width: 100%;
+    max-width: 400px;
+    border-radius: 25px 25px 0 0;
+    padding: 25px;
+    animation: slideUp 0.4s ease;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.modal-content label {
+    display: block;
+    margin: 6px 0;
+}
+
+.modal-content button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 12px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+    .modal-content button:first-of-type {
+        background: #ddd;
+    }
+
+    .modal-content button:last-of-type {
+        background: #8b0000;
+        color: white;
+    }
+
+        .modal-content button:last-of-type:hover {
+            background: #a30000;
+        }
+
+/* ======================================================
+   RESEÑAS
+====================================================== */
+.reviews {
+    background: #e6b08a;
+    padding: 40px;
+    margin: 30px;
+    border-radius: 25px;
+}
+
+.review-slider {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+}
+
+.review-card {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    min-width: 250px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+    .review-card:hover {
+        transform: translateY(-5px);
+    }
+
+/* ======================================================
+   UBICACIÓN
+====================================================== */
+iframe {
+    width: 100%;
+    height: 350px;
+    border-radius: 20px;
+}
+
+/* ======================================================
+   CONTACTO (DOBLE COLUMNA)
+====================================================== */
+.contact-wrapper {
+    display: flex;
+    gap: 30px;
+    justify-content: center;
+    padding: 50px;
+    flex-wrap: wrap;
+}
+
+.contact-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+}
+
+.subtitle {
+    color: gray;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+    .form-group input,
+    .form-group textarea {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
+
+.btn-enviar {
+    width: 100%;
+    background: #8b0000;
+    color: white;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    font-weight: bold;
+}
+
+/* REDES */
+.redes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.red {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    justify-content: center;
+    padding: 12px;
+    border-radius: 12px;
+    color: white;
+    font-weight: bold;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+    .red:hover {
+        transform: scale(1.05);
+    }
+
+.social-instagram {
+    background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af);
+}
+
+.social-whatsapp {
+    background: #25d366;
+}
+
+/* ======================================================
+   ACERCA DE
+====================================================== */
+.acerca-container {
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.acerca-card {
+    display: flex;
+    gap: 30px;
+    background: white;
+    border-radius: 25px;
+    padding: 30px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    align-items: center;
+}
+
+.acerca-img img {
+    width: 200px;
+    border-radius: 20px;
+}
+
+.acerca-text h2 {
+    color: #8b0000;
+}
+
+/* ======================================================
+   FOOTER
+====================================================== */
+.footer {
+    background: #8b0000;
+    color: white;
+}
+
+/* ======================================================
+   RESPONSIVE
+====================================================== */
+@media (max-width: 768px) {
+
+    .logo-navbar {
+        height: 35px;
+    }
+
+    .products {
+        justify-content: center;
+    }
+
+    .product {
+        width: 90%;
+    }
+
+    .acerca-card {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+.pago-container {
+    background: white;
+    margin: 30px;
+    padding: 30px;
+    border-radius: 20px;
+}
+
+    .pago-container form {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .pago-container input,
+    .pago-container select {
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
+
+    .pago-container button {
+        background: #8b0000;
+        color: white;
+        padding: 12px;
+        border-radius: 12px;
+        border: none;
+        font-weight: bold;
+    }

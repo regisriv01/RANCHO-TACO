@@ -1,0 +1,136 @@
+﻿<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - RANCHO_TACO</title>
+
+    <!-- BOOTSTRAP -->
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- ICONOS (IMPORTANTE) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+
+    <!-- CSS PROPIO -->
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/RANCHO_TACO.styles.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <!-- =========================
+         NAVBAR
+    ========================= -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark box-shadow mb-3">
+            <div class="container">
+
+                <!-- LOGO -->
+                <a class="navbar-brand d-flex align-items-center flex-shrink-0" asp-controller="Home" asp-action="Index">
+                    <img src="~/images/logo.jpg" alt="Rancho Taco" class="logo-navbar" />
+                </a>
+
+                <!-- BOTÓN MOBILE -->
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"
+                        aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <!-- CONTENIDO -->
+                <div class="collapse navbar-collapse justify-content-between" id="navbarContent">
+
+                    <!-- IZQUIERDA -->
+                    <ul class="navbar-nav me-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Index">
+                                Home
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Menu">
+                                Menú
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Contacto" asp-action="Index">
+                                Contacto
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" asp-controller="Home" asp-action="Acerca">
+                                Acerca de
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <!-- DERECHA -->
+                    <ul class="navbar-nav">
+
+                        <li class="nav-item">
+                            <a class="nav-link position-relative" asp-controller="Carrito" asp-action="Index">
+                                <i class="fas fa-shopping-cart"></i>
+                                <span id="contadorCarrito" class="badge-carrito">0</span>
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link">
+                                <i class="fas fa-user"></i>
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- =========================
+         CONTENIDO PRINCIPAL
+    ========================= -->
+    <main class="container pb-4">
+        @RenderBody()
+    </main>
+
+    <!-- =========================
+         FOOTER
+    ========================= -->
+    <footer class="footer text-center py-3">
+        <div class="container">
+            <small>&copy; 2026 RANCHO_TACO | Todos los derechos reservados</small>
+        </div>
+    </footer>
+
+    <!-- =========================
+         SCRIPTS
+    ========================= -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <!-- CONTADOR CARRITO -->
+    <script>
+            function actualizarContadorCarrito() {
+
+                let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
+                let contador = document.getElementById("contadorCarrito");
+
+                if (contador) {
+                    contador.innerText = carrito.length;
+                    contador.style.display = carrito.length > 0 ? "inline-block" : "none";
+                }
+            }
+
+            document.addEventListener("DOMContentLoaded", actualizarContadorCarrito);
+    </script>
+
+</body>
+</html>

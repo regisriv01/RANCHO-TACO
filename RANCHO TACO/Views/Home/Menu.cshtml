@@ -1,0 +1,178 @@
+﻿@model List<RANCHO_TACO.Models.Producto>
+
+@{
+    ViewData["Title"] = "Menú";
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+<section class="top-products">
+    <h2>Menú</h2>
+
+    @foreach (var grupo in Model.GroupBy(p => p.Categoria))
+    {
+        <div class="menu-section">
+
+            <h2>@grupo.Key</h2><br />
+
+            <div class="products">
+
+                @foreach (var item in grupo)
+                {
+                    <div class="product">
+
+                        @if (!string.IsNullOrEmpty(item.ImagenUrl))
+                        {
+                            <img src="@item.ImagenUrl" class="product-img" />
+                        }
+
+                        <h3>@item.Nombre</h3>
+                        <p>$@item.Precio</p>
+
+                        <!-- BOTÓN CORREGIDO (evita errores por comillas) -->
+                        <button onclick="abrirModal(@item.Id, '@item.Nombre.Replace("'", "\\'")', @item.Precio, '@item.Categoria')">
+                            Agregar
+                        </button>
+
+                    </div>
+                }
+
+            </div>
+        </div>
+    }
+</section>
+
+<!-- MODAL -->
+<div id="modal" class="modal">
+    <div class="modal-content">
+
+        <h2 id="productoTitulo"></h2>
+        <p id="precioBase"></p>
+
+        <h4>Ingredientes</h4>
+        <div id="ingredientes"></div>
+
+        <h4>Extras</h4>
+        <div id="extras"></div>
+
+        <h3>Total: $<span id="total">0</span></h3>
+
+        <button onclick="cerrarModal()">Cancelar</button>
+        <button onclick="guardarCarrito()">Agregar</button>
+
+    </div>
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+
+    // VARIABLE GLOBAL CORRECTA
+    let productoActual = {
+        id: 0,
+        nombre: "",
+        precio: 0,
+        categoria: ""
+    };
+
+    // ABRIR MODAL
+    function abrirModal(id, nombre, precio, categoria) {
+
+        productoActual = { id, nombre, precio, categoria };
+
+        document.getElementById("modal").style.display = "flex";
+        document.getElementById("productoTitulo").innerText = nombre;
+        document.getElementById("precioBase").innerText = "Base: $" + precio;
+
+        let contIng = document.getElementById("ingredientes");
+        let contExt = document.getElementById("extras");
+
+        contIng.innerHTML = "";
+        contExt.innerHTML = "";
+
+        let ingredientes = [];
+        let extras = [];
+
+        if (categoria === "Tacos") {
+            ingredientes = ["Cilantro", "Cebolla", "Salsa", "Limón"];
+            extras = [{nombre:"Frijoles charros", precio:20}];
+        }
+        else if (categoria === "Tortas") {
+            ingredientes = ["Jamón", "Queso", "Mayonesa", "Lechuga"];
+        }
+        else if (categoria === "Papas") {
+            ingredientes = ["Queso", "Crema", "Mantequilla"];
+        }
+
+        // INGREDIENTES
+        ingredientes.forEach(i => {
+            contIng.innerHTML += `
+                <label>
+                    <input type="checkbox" checked value="${i}" onchange="calcularTotal()">
+                    ${i}
+                </label><br>
+            `;
+        });
+
+        // EXTRAS
+        extras.forEach(e => {
+            contExt.innerHTML += `
+                <label>
+                    <input type="checkbox" value="${e.precio}" onchange="calcularTotal()">
+                    ${e.nombre} (+$${e.precio})
+                </label><br>
+            `;
+        });
+
+        calcularTotal();
+    }
+
+    // CALCULAR TOTAL
+    function calcularTotal() {
+
+        let total = productoActual.precio;
+
+        document.querySelectorAll("#extras input:checked")
+            .forEach(e => total += parseInt(e.value));
+
+        document.getElementById("total").innerText = total;
+    }
+
+    // CERRAR MODAL
+    function cerrarModal() {
+        document.getElementById("modal").style.display = "none";
+    }
+
+    // GUARDAR EN CARRITO
+    function guardarCarrito() {
+
+        let ingredientes = [];
+        let extras = [];
+
+        document.querySelectorAll("#ingredientes input:checked")
+            .forEach(i => ingredientes.push(i.value));
+
+        document.querySelectorAll("#extras input:checked")
+            .forEach(e => extras.push(e.parentElement.innerText));
+
+        let total = parseInt(document.getElementById("total").innerText);
+
+        let producto = {
+            id: productoActual.id,
+            nombre: productoActual.nombre,
+            precio: total,
+            ingredientes: ingredientes,
+            extras: extras
+        };
+
+        let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
+
+        carrito.push(producto);
+
+        sessionStorage.setItem("carrito", JSON.stringify(carrito));
+
+        alert("Producto agregado al carrito");
+
+        cerrarModal();
+    }
+
+</script>

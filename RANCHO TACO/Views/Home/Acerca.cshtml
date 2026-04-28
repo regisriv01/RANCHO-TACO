@@ -1,0 +1,78 @@
+﻿@{
+    ViewData["Title"] = "Acerca de";
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+<section class="acerca-container">
+
+    <!-- =========================
+         FRAME 1 - RANCHO TACO
+    ========================= -->
+    <div class="acerca-card">
+
+        <div class="acerca-img">
+            <img src="~/images/logo.jpg" alt="Rancho Taco" />
+        </div>
+
+        <div class="acerca-text">
+            <h2>Rancho Taco</h2>
+
+            <h4>Misión</h4>
+            <p>
+                Ofrecer en Reynosa tacos con el auténtico sabor del rancho, preparados con recetas tradicionales que nos recuerdan nuestras raíces. En Rancho Taco buscamos compartir ese sazón casero que extrañábamos, brindando calidad, buen servicio y un ambiente cálido y familiar para todos nuestros clientes.
+            </p>
+
+            <h4>Visión</h4>
+            <p>
+                Ser reconocidos en Reynosa como la taquería que conserva el verdadero sabor del rancho, destacándonos por nuestra autenticidad, atención cercana y compromiso con la tradición, creciendo sin perder nuestras raíces ni el sazón que nos inspira.
+            </p>
+        </div>
+
+    </div>
+
+    <!-- =========================
+         FRAME 2 - EMPRESA SOFTWARE
+    ========================= -->
+    <div class="acerca-card">
+
+        <div class="acerca-img">
+            <img src="~/images/logo2.jpeg" alt="TechHorizon" />
+        </div>
+
+        <div class="acerca-text">
+            <h2>Desarrollo de Software</h2>
+
+            <h4>Misión</h4>
+            <p>
+                Proveer soluciones tecnológicas personalizadas en plataformas web y móviles que potencien el crecimiento de nuestros clientes, fundamentadas en arquitecturas de software robustas, escalables y un diseño centrado en la experiencia del usuario logrando los objetivos estratégicos de su negocio a través de una comunicación cercana y profesional.
+            </p>
+
+            <p>
+                Juntos impulsamos el éxito empresarial a través de la arquitectura y diseño de software de vanguardia, creando herramientas digitales que optimizan la operatividad y nuestra presencia en el mercado.
+            </p>
+
+            <h4>Visión</h4>
+            <p>
+                Convertirnos en el referente líder de desarrollo de software empresarial, destacando por nuestra excelencia técnica y la capacidad de transformar ideas complejas en ecosistemas digitales innovadores y eficientes.
+            </p>
+
+            <p>
+                Siendo reconocidos por nuestra empatía con el cliente, la estética de nuestras interfaces y la fiabilidad de nuestros sistemas.
+            </p>
+        </div>
+
+    </div>
+
+</section>using Microsoft.AspNetCore.Mvc;
+
+namespace RANCHO_TACO.Views.Home
+{
+    public class Acerca : Controller
+    {
+        public IActionResult Index()
+        {
+            return View();
+        }
+    }
+}

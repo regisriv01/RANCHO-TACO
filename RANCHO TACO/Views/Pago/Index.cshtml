@@ -1,0 +1,88 @@
+﻿@{
+    ViewData["Title"] = "Pago";
+}
+
+<link rel="stylesheet" href="~/css/site.css" />
+
+<section class="pago-container">
+
+    <h2>Finalizar pedido</h2>
+
+    <!-- =========================
+         RESUMEN DEL CARRITO
+    ========================= -->
+    <div id="resumen"></div>
+
+    <h3>Total: $<span id="total">0</span></h3>
+
+    <!-- =========================
+         FORMULARIO
+    ========================= -->
+    <form onsubmit="pagar(event)">
+
+        <input type="text" placeholder="Nombre completo" required />
+        <input type="text" placeholder="Dirección de entrega" required />
+        <input type="tel" placeholder="Teléfono" required />
+
+        <select>
+            <option value="Efectivo">Pago en efectivo</option>
+            <option value="Tarjeta">Tarjeta</option>
+        </select>
+
+        <button type="submit">Confirmar pedido</button>
+
+    </form>
+
+</section>
+
+<script>
+
+    // =============================
+    // CARGAR CARRITO
+    // =============================
+    function cargarResumen() {
+
+        let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
+
+        let contenedor = document.getElementById("resumen");
+        contenedor.innerHTML = "";
+
+        let total = 0;
+
+        carrito.forEach(p => {
+
+            total += parseInt(p.precio);
+
+            contenedor.innerHTML += `
+                <div class="item-carrito">
+                    <h4>${p.nombre}</h4>
+                    <p>$${p.precio}</p>
+
+                    ${p.ingredientes.length ? `<small>Ingredientes: ${p.ingredientes.join(", ")}</small>` : ""}
+                    ${p.extras.length ? `<small>Extras: ${p.extras.join(", ")}</small>` : ""}
+                </div>
+            `;
+        });
+
+        document.getElementById("total").innerText = total;
+    }
+
+    // =============================
+    // PROCESAR PAGO
+    // =============================
+    function pagar(e) {
+        e.preventDefault();
+
+        alert("Pedido confirmado correctamente");
+
+        // limpiar carrito
+        sessionStorage.removeItem("carrito");
+
+        // redirigir
+        window.location.href = "/Pago/Confirmacion";
+    }
+
+    // iniciar
+    cargarResumen();
+
+</script>
