@@ -1,4 +1,4 @@
-﻿namespace RanchoTacoSQLite.Models
+﻿namespace RANCHO_TACO.Models
 {
     public class Usuario
     {
