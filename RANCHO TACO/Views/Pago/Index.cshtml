@@ -8,24 +8,45 @@
 
     <h2>Finalizar pedido</h2>
 
-    <!-- =========================
-         RESUMEN DEL CARRITO
-    ========================= -->
+    <!-- RESUMEN -->
     <div id="resumen"></div>
 
     <h3>Total: $<span id="total">0</span></h3>
 
-    <!-- =========================
-         FORMULARIO
-    ========================= -->
-    <form onsubmit="pagar(event)">
+    <!-- FORMULARIO -->
+    <form asp-action="ConfirmarPago" method="post" onsubmit="prepararCarrito()">
 
-        <input type="text" placeholder="Nombre completo" required />
-        <input type="text" placeholder="Dirección de entrega" required />
-        <input type="tel" placeholder="Teléfono" required />
+        <!-- 🔥 INPUT OCULTO PARA EL CARRITO -->
+        <input type="hidden" name="CarritoJson" id="carritoJson" />
 
-        <select>
-            <option value="Efectivo">Pago en efectivo</option>
+        <!-- TIPO DE ENTREGA -->
+        <label>Tipo de entrega</label>
+        <select id="tipoEntrega" name="TipoEntrega" required>
+            <option value="Tienda">Recoger en tienda</option>
+            <option value="Domicilio">Entrega a domicilio</option>
+        </select>
+
+        <!-- DATOS -->
+        <input type="text" name="Nombre" placeholder="Nombre completo" required />
+        <input type="tel" name="Telefono" placeholder="Teléfono" required />
+
+        <!-- DIRECCIÓN -->
+        <div id="direccionBox" class="direccion-box">
+
+            <h4>Dirección de entrega</h4>
+
+            <input type="text" name="Calle" placeholder="Calle" />
+            <input type="text" name="Numero" placeholder="Número" />
+            <input type="text" name="Fraccionamiento" placeholder="Fraccionamiento" />
+            <input type="text" name="CP" placeholder="Código Postal" />
+            <textarea name="Referencia" placeholder="Referencia"></textarea>
+
+        </div>
+
+        <!-- MÉTODO -->
+        <label>Método de pago</label>
+        <select name="MetodoPago">
+            <option value="Efectivo">Efectivo</option>
             <option value="Tarjeta">Tarjeta</option>
         </select>
 
@@ -37,9 +58,16 @@
 
 <script>
 
-    // =============================
-    // CARGAR CARRITO
-    // =============================
+    const tipoEntrega = document.getElementById("tipoEntrega");
+    const direccionBox = document.getElementById("direccionBox");
+
+    function toggleDireccion() {
+        direccionBox.style.display =
+            tipoEntrega.value === "Domicilio" ? "block" : "none";
+    }
+
+    tipoEntrega.addEventListener("change", toggleDireccion);
+
     function cargarResumen() {
 
         let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
@@ -57,7 +85,6 @@
                 <div class="item-carrito">
                     <h4>${p.nombre}</h4>
                     <p>$${p.precio}</p>
-
                     ${p.ingredientes.length ? `<small>Ingredientes: ${p.ingredientes.join(", ")}</small>` : ""}
                     ${p.extras.length ? `<small>Extras: ${p.extras.join(", ")}</small>` : ""}
                 </div>
@@ -67,22 +94,13 @@
         document.getElementById("total").innerText = total;
     }
 
-    // =============================
-    // PROCESAR PAGO
-    // =============================
-    function pagar(e) {
-        e.preventDefault();
-
-        alert("Pedido confirmado correctamente");
-
-        // limpiar carrito
-        sessionStorage.removeItem("carrito");
-
-        // redirigir
-        window.location.href = "/Pago/Confirmacion";
+    // 🔥 ESTE ES EL CAMBIO IMPORTANTE
+    function prepararCarrito() {
+        document.getElementById("carritoJson").value =
+            sessionStorage.getItem("carrito");
     }
 
-    // iniciar
     cargarResumen();
+    toggleDireccion();
 
 </script>

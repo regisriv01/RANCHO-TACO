@@ -7,10 +7,10 @@ namespace RANCHO_TACO.Models
         public int Id { get; set; }
 
         [Required]
-        public string Nombre { get; set; }
+        public string Nombre { get; set; } = string.Empty;
 
         [Required]
-        public string Comentario { get; set; }
+        public string Comentario { get; set; } = string.Empty;
 
         public int Calificacion { get; set; } // 1 a 5 estrellas
     }

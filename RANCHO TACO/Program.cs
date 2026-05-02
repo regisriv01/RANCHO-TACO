@@ -1,8 +1,9 @@
 using Microsoft.EntityFrameworkCore;
+using RANCHO_TACO.Services;
 using RanchoTaco.Data;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddScoped<EmailService>();
 // 🔹 Servicios MVC
 builder.Services.AddControllersWithViews();
 

@@ -1,5 +1,5 @@
 /* ======================================================
-   RESET + BASE (FIX FOOTER + MOBILE)
+RESET + BASE (FIX FOOTER + MOBILE)
 ====================================================== */
 html, body {
     height: 100%;
@@ -19,7 +19,7 @@ body {
 }
 
 /* ======================================================
-   NAVBAR
+NAVBAR
 ====================================================== */
 .navbar {
     background: rgba(139, 0, 0, 0.95) !important;
@@ -49,7 +49,7 @@ body {
 }
 
 /* ======================================================
-   LOGO
+LOGO
 ====================================================== */
 .logo-navbar {
     height: 45px;
@@ -61,7 +61,7 @@ body {
     }
 
 /* ======================================================
-   CARRITO BADGE
+CARRITO BADGE
 ====================================================== */
 .badge-carrito {
     position: absolute;
@@ -76,7 +76,7 @@ body {
 }
 
 /* ======================================================
-   SLIDER
+SLIDER
 ====================================================== */
 .hero-slider {
     margin: 20px;
@@ -104,7 +104,7 @@ body {
         }
 
 /* ======================================================
-   PRODUCTOS
+PRODUCTOS
 ====================================================== */
 .top-products {
     background: rgba(107, 88, 72, 0.95);
@@ -122,7 +122,7 @@ body {
 }
 
 /* ======================================================
-   TARJETAS
+TARJETAS
 ====================================================== */
 .product {
     background: linear-gradient(145deg, #8b0000, #a30000);
@@ -157,7 +157,7 @@ body {
 }
 
 /* ======================================================
-   CONTACTO
+CONTACTO
 ====================================================== */
 .contact-wrapper {
     display: flex;
@@ -177,7 +177,7 @@ body {
 }
 
 /* ======================================================
-   REDES
+REDES
 ====================================================== */
 .redes-list {
     display: flex;
@@ -204,7 +204,7 @@ body {
 }
 
 /* ======================================================
-   ACERCA
+ACERCA
 ====================================================== */
 .acerca-container {
     padding: 20px;
@@ -233,7 +233,86 @@ body {
 }
 
 /* ======================================================
-   FOOTER (FIX)
+PAGOS
+====================================================== */
+.pago-container {
+    background: rgba(255,255,255,0.95);
+    margin: 20px auto;
+    padding: 25px;
+    border-radius: 20px;
+    max-width: 600px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
+}
+
+    .pago-container h2 {
+        text-align: center;
+        color: #8b0000;
+    }
+
+    .pago-container h3 {
+        text-align: right;
+        margin-top: 15px;
+    }
+
+/* RESUMEN */
+.item-carrito {
+    background: #f5f5f5;
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 10px;
+    transition: 0.3s;
+}
+
+    .item-carrito:hover {
+        transform: scale(1.02);
+    }
+
+    .item-carrito small {
+        display: block;
+        color: gray;
+    }
+
+/* FORMULARIO */
+.pago-container form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 15px;
+}
+
+.pago-container input,
+.pago-container select,
+.pago-container textarea {
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+}
+
+/* DIRECCIÓN */
+.direccion-box {
+    display: none;
+    background: #f3f3f3;
+    padding: 15px;
+    border-radius: 12px;
+}
+
+/* BOTÓN */
+.pago-container button {
+    background: linear-gradient(145deg, #8b0000, #a30000);
+    color: white;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+    .pago-container button:hover {
+        transform: scale(1.03);
+    }
+
+/* ======================================================
+FOOTER
 ====================================================== */
 .footer {
     background: #8b0000;
@@ -243,10 +322,11 @@ body {
 }
 
 /* ======================================================
-   RESPONSIVE
+RESPONSIVE
 ====================================================== */
 @media (max-width: 768px) {
 
+   
     .logo-navbar {
         height: 35px;
     }
@@ -278,6 +358,11 @@ body {
     }
 
     .contact-wrapper {
+        padding: 20px;
+    }
+
+    .pago-container {
+        margin: 10px;
         padding: 20px;
     }
 }
