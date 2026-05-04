@@ -1,6 +1,10 @@
 /* ======================================================
-RESET + BASE (FIX FOOTER + MOBILE)
+   RESET + BASE
 ====================================================== */
+* {
+    box-sizing: border-box;
+}
+
 html, body {
     height: 100%;
     margin: 0;
@@ -12,14 +16,22 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
+    min-height: 100vh; /* Garantiza que el body ocupe toda la pantalla */
 }
 
-.container {
-    flex: 1;
+/* CONTENEDOR GLOBAL */
+main, .main-container {
+    flex: 1; /* Empuja el footer hacia abajo */
+}
+
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 /* ======================================================
-NAVBAR
+   NAVBAR
 ====================================================== */
 .navbar {
     background: rgba(139, 0, 0, 0.95) !important;
@@ -29,6 +41,11 @@ NAVBAR
     top: 0;
     z-index: 1000;
 }
+
+    .navbar .container-fluid {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
 
     .navbar .nav-link {
         color: white !important;
@@ -44,13 +61,6 @@ NAVBAR
     gap: 15px;
 }
 
-.navbar-toggler {
-    border: none;
-}
-
-/* ======================================================
-LOGO
-====================================================== */
 .logo-navbar {
     height: 45px;
     transition: 0.3s;
@@ -60,9 +70,7 @@ LOGO
         transform: scale(1.05);
     }
 
-/* ======================================================
-CARRITO BADGE
-====================================================== */
+/* BADGE CARRITO */
 .badge-carrito {
     position: absolute;
     top: -5px;
@@ -72,14 +80,14 @@ CARRITO BADGE
     font-size: 10px;
     padding: 3px 6px;
     border-radius: 50%;
-    font-weight: bold;
 }
 
 /* ======================================================
-SLIDER
+   SLIDER
 ====================================================== */
 .hero-slider {
-    margin: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
 }
 
 .slider-container {
@@ -87,7 +95,6 @@ SLIDER
     height: 300px;
     overflow: hidden;
     border-radius: 25px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
 }
 
     .slider-container img {
@@ -96,97 +103,210 @@ SLIDER
         height: 100%;
         object-fit: cover;
         opacity: 0;
-        transition: opacity 1s ease-in-out;
     }
 
         .slider-container img.active {
             opacity: 1;
         }
 
+.slide {
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+    .slide.active {
+        opacity: 1;
+    }
+
 /* ======================================================
-PRODUCTOS
+   PRODUCTOS (HOME Y MENÚ)
 ====================================================== */
 .top-products {
     background: rgba(107, 88, 72, 0.95);
     color: white;
     padding: 30px;
-    margin: 20px;
+    margin: 20px auto;
     border-radius: 25px;
+    max-width: 1200px;
 }
 
-.products {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
+    /* Agrupamos ambas clases para no repetir código */
+    .top-products .products,
+    .menu-section .products {
+        display: grid;
+        /* auto-fill + 250px fijos = evita que se estiren de más */
+        grid-template-columns: repeat(auto-fill, 250px);
+        /* start = las obliga a anclarse a la izquierda bajo sus títulos */
+        justify-content: start;
+        gap: 25px;
+    }
+
+.menu-section {
+    margin-bottom: 50px;
 }
+
+    .menu-section .product {
+        height: 100%;
+    }
 
 /* ======================================================
-TARJETAS
+   TARJETAS DE PRODUCTO
 ====================================================== */
 .product {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     background: linear-gradient(145deg, #8b0000, #a30000);
     border-radius: 20px;
-    width: 220px;
     padding: 15px;
     text-align: center;
     box-shadow: 0 10px 25px rgba(0,0,0,0.4);
     transition: 0.3s;
+    height: 100%;
 }
 
     .product:hover {
-        transform: translateY(-8px);
+        transform: translateY(-6px) scale(1.02);
     }
 
-.product-img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 15px;
+    .product-img,
+    .product img {
+        width: 100%;
+        height: 180px;
+        aspect-ratio: 4/3;
+        object-fit: cover;
+        border-radius: 15px;
+        background: #eee;
+        opacity: 0;
+        transition: opacity .5s;
+    }
+
+        .product img.loaded {
+            opacity: 1;
+        }
+
+    .product button {
+        margin-top: auto;
+        background: white;
+        color: #8b0000;
+        border: none;
+        padding: 10px;
+        border-radius: 12px;
+        font-weight: bold;
+    }
+
+button:active {
+    transform: scale(0.95);
 }
 
-.product button {
-    background: white;
-    color: #8b0000;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    border-radius: 12px;
-    margin-top: 10px;
-    font-weight: bold;
+/* Animación al agregar al carrito */
+.product.added {
+    animation: pop .3s ease;
+}
+
+@keyframes pop {
+    0% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
 }
 
 /* ======================================================
-CONTACTO
+   RESEÑAS
+====================================================== */
+.reviews {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.review-slider {
+    display: flex;
+    gap: 20px;
+    overflow-x: auto;
+    padding: 20px;
+    background: white;
+    border-radius: 20px;
+}
+
+.review-card {
+    min-width: 250px;
+    background: white;
+    padding: 15px;
+    border-radius: 15px;
+}
+
+/* ======================================================
+   CONTACTO Y FORMULARIO (LAYOUT PRO)
 ====================================================== */
 .contact-wrapper {
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-    padding: 40px 20px;
-    flex-wrap: wrap;
+    max-width: 1100px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
 }
 
 .contact-card {
     background: white;
     padding: 25px;
     border-radius: 20px;
-    width: 100%;
-    max-width: 420px;
     box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
-/* ======================================================
-REDES
-====================================================== */
+    .contact-card h2 {
+        margin-bottom: 5px;
+    }
+
+    .contact-card p {
+        margin: 8px 0;
+    }
+
+.subtitle {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 15px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .form-group input,
+    .form-group textarea {
+        padding: 12px;
+        border-radius: 10px;
+        border: 1px solid #ccc;
+    }
+
+.btn-enviar {
+    background: #8b0000;
+    color: white;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    font-weight: bold;
+}
+
+/* REDES SOCIALES */
 .redes-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 12px;
 }
 
 .red {
     display: flex;
+    align-items: center;
     justify-content: center;
     padding: 12px;
     border-radius: 12px;
@@ -200,14 +320,343 @@ REDES
 }
 
 .social-whatsapp {
-    background: #25d366;
+    background: #25D366;
 }
 
 /* ======================================================
-ACERCA
+   UBICACIÓN
+====================================================== */
+.location iframe {
+    width: 100%;
+    height: 250px;
+    border-radius: 15px;
+}
+
+/* ======================================================
+   TOAST (NOTIFICACIONES)
+====================================================== */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #8b0000;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: .3s;
+    z-index: 9999;
+}
+
+    .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+/* ======================================================
+   FOOTER PRO (Animado y con gradiente)
+====================================================== */
+.footer {
+    background: linear-gradient(145deg, #8b0000, #a30000);
+    color: white;
+    text-align: center;
+    padding: 12px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: footerFade 0.6s ease forwards;
+}
+
+@keyframes footerFade {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ======================================================
+   RESPONSIVE (MÓVIL)
+====================================================== */
+@media (max-width: 768px) {
+    /* Ajustes de grillas y tamaños */
+    .top-products .products,
+    .menu-section .products {
+        grid-template-columns: 1fr;
+    }
+
+    .contact-wrapper {
+        grid-template-columns: 1fr;
+    }
+
+    .slider-container {
+        height: 180px;
+    }
+
+    .product-img {
+        height: 150px;
+    }
+
+    /* Comportamiento del Footer fijo tipo app */
+    body {
+        padding-bottom: 70px; /* Espacio para que el contenido no quede detrás del footer */
+    }
+
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 999;
+        box-shadow: 0 -5px 20px rgba(0,0,0,0.3);
+        animation: none; /* Evita que la animación interfiera en móvil */
+        opacity: 1;
+        transform: none;
+    }
+}
+/* ======================================================
+ACERCA PRO
+====================================================== */
+
+.acerca-wrapper {
+    max-width: 1100px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+
+/* TARJETAS */
+.acerca-card {
+    background: white;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    transition: 0.3s;
+}
+
+    .acerca-card:hover {
+        transform: translateY(-5px);
+    }
+
+    /* TITULO PRINCIPAL */
+    .acerca-card h1 {
+        margin-bottom: 15px;
+    }
+
+/* BLOQUES */
+.acerca-block {
+    margin-bottom: 20px;
+}
+
+    .acerca-block h3 {
+        color: #8b0000;
+        margin-bottom: 5px;
+    }
+
+    .acerca-block p {
+        color: #333;
+        line-height: 1.6;
+    }
+
+/* ======================================================
+RESPONSIVE
+====================================================== */
+@media (max-width: 768px) {
+    .acerca-wrapper {
+        grid-template-columns: 1fr;
+    }
+}
+/* ======================================================
+ACERCA (LAYOUT PRO CORREGIDO)
+====================================================== */
+
+/* CONTENEDOR */
+.acerca-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* TARJETAS */
+.acerca-card {
+    display: flex;
+    align-items: center; /* centra vertical */
+    gap: 30px;
+    background: #f5f5f5;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+    .acerca-card:hover {
+        transform: translateY(-5px);
+    }
+
+/* ======================================================
+IMAGEN
+====================================================== */
+.acerca-img {
+    flex: 0 0 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .acerca-img img {
+        width: 100%;
+        max-width: 160px;
+        height: auto;
+        object-fit: contain; /* 🔥 clave: no recorta */
+        border-radius: 15px;
+    }
+
+/* ======================================================
+TEXTO
+====================================================== */
+.acerca-text {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+    .acerca-text h2 {
+        margin-bottom: 10px;
+    }
+
+    .acerca-text h4 {
+        color: #8b0000;
+        margin-top: 10px;
+    }
+
+    .acerca-text p {
+        color: #333;
+        line-height: 1.6;
+    }
+
+/* ======================================================
+RESPONSIVE
+====================================================== */
+@media (max-width: 768px) {
+
+    .acerca-card {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .acerca-img {
+        width: 100%;
+    }
+
+        .acerca-img img {
+            max-width: 140px;
+        }
+}
+/* ======================================================
+MOTION SYSTEM (sin setInterval)
+====================================================== */
+:root {
+    --easing: cubic-bezier(.2,.7,.2,1);
+    --t-fast: 180ms;
+    --t-med: 300ms;
+    --t-slow: 520ms;
+    --brand: #8b0000;
+    --bg-card: #f5f5f5;
+}
+
+/* Reveal on scroll */
+.reveal {
+    opacity: 0;
+    transform: translateY(24px) scale(.98);
+    transition: opacity var(--t-slow) var(--easing), transform var(--t-slow) var(--easing);
+    will-change: opacity, transform;
+}
+
+    .reveal.is-visible {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+/* Card hover */
+.card {
+    background: var(--bg-card);
+    border-radius: 20px;
+    box-shadow: 0 8px 20px rgba(0,0,0,.18);
+    transition: transform var(--t-med) var(--easing), box-shadow var(--t-med) var(--easing);
+}
+
+    .card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 16px 30px rgba(0,0,0,.22);
+    }
+
+/* Buttons */
+.btn-primary-pro {
+    background: var(--brand);
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    padding: 12px 18px;
+    font-weight: 600;
+    transition: transform var(--t-fast) var(--easing), box-shadow var(--t-fast) var(--easing), background var(--t-fast);
+}
+
+    .btn-primary-pro:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 18px rgba(139,0,0,.35);
+        background: #a30000;
+    }
+
+/* Toast carrito */
+.cart-toast {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    background: #111;
+    color: #fff;
+    padding: 12px 16px;
+    border-radius: 12px;
+    box-shadow: 0 10px 25px rgba(0,0,0,.35);
+    opacity: 0;
+    transform: translateY(16px);
+    pointer-events: none;
+    transition: opacity var(--t-fast), transform var(--t-fast);
+    z-index: 9999;
+}
+
+    .cart-toast.show {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+/* Skeleton (carga imágenes) */
+.img-skeleton {
+    background: linear-gradient(90deg,#eee 25%,#f7f7f7 37%,#eee 63%);
+    background-size: 400% 100%;
+    animation: shimmer 1.2s infinite linear;
+    border-radius: 12px;
+}
+
+@keyframes shimmer {
+    0% {
+        background-position: 100% 0;
+    }
+
+    100% {
+        background-position: -100% 0;
+    }
+}
+
+/* ======================================================
+ACERCA (ultra pro)
 ====================================================== */
 .acerca-container {
-    padding: 20px;
+    max-width: 1100px;
+    margin: 40px auto;
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -215,154 +664,284 @@ ACERCA
 
 .acerca-card {
     display: flex;
-    gap: 20px;
-    background: white;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    align-items: center;
+    gap: 30px;
+    padding: 30px;
+}
+
+.acerca-img {
+    flex: 0 0 200px;
+    display: flex;
+    justify-content: center;
     align-items: center;
 }
 
-.acerca-img img {
-    width: 180px;
-    border-radius: 15px;
-}
-
-.acerca-text h2 {
-    color: #8b0000;
-}
-
-/* ======================================================
-PAGOS
-====================================================== */
-.pago-container {
-    background: rgba(255,255,255,0.95);
-    margin: 20px auto;
-    padding: 25px;
-    border-radius: 20px;
-    max-width: 600px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-}
-
-    .pago-container h2 {
-        text-align: center;
-        color: #8b0000;
+    .acerca-img img {
+        width: 100%;
+        max-width: 160px;
+        height: auto;
+        object-fit: contain;
+        border-radius: 14px;
     }
 
-    .pago-container h3 {
-        text-align: right;
-        margin-top: 15px;
-    }
-
-/* RESUMEN */
-.item-carrito {
-    background: #f5f5f5;
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    transition: 0.3s;
-}
-
-    .item-carrito:hover {
-        transform: scale(1.02);
-    }
-
-    .item-carrito small {
-        display: block;
-        color: gray;
-    }
-
-/* FORMULARIO */
-.pago-container form {
+.acerca-text {
+    flex: 1;
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-top: 15px;
+    justify-content: center;
 }
 
-.pago-container input,
-.pago-container select,
-.pago-container textarea {
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-}
-
-/* DIRECCIÓN */
-.direccion-box {
-    display: none;
-    background: #f3f3f3;
-    padding: 15px;
-    border-radius: 12px;
-}
-
-/* BOTÓN */
-.pago-container button {
-    background: linear-gradient(145deg, #8b0000, #a30000);
-    color: white;
-    padding: 14px;
-    border-radius: 12px;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-    .pago-container button:hover {
-        transform: scale(1.03);
+    .acerca-text h2 {
+        margin-bottom: 10px;
     }
 
-/* ======================================================
-FOOTER
-====================================================== */
-.footer {
-    background: #8b0000;
-    color: white;
-    text-align: center;
-    padding: 10px;
+    .acerca-text h4 {
+        color: var(--brand);
+        margin-top: 10px;
+    }
+
+    .acerca-text p {
+        line-height: 1.6;
+        color: #333;
+    }
+
+/* CTA opcional dentro de acerca */
+.acerca-cta {
+    margin-top: 14px;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
 }
 
-/* ======================================================
-RESPONSIVE
-====================================================== */
+/* Responsive */
 @media (max-width: 768px) {
-
-   
-    .logo-navbar {
-        height: 35px;
-    }
-
-    .hero-slider {
-        margin: 10px;
-    }
-
-    .slider-container {
-        height: 200px;
-    }
-
-    .top-products {
-        margin: 10px;
-        padding: 20px;
-    }
-
-    .product {
-        width: 100%;
-    }
-
     .acerca-card {
         flex-direction: column;
         text-align: center;
     }
 
     .acerca-img img {
-        width: 120px;
-    }
-
-    .contact-wrapper {
-        padding: 20px;
-    }
-
-    .pago-container {
-        margin: 10px;
-        padding: 20px;
+        max-width: 140px;
     }
 }
+/* =========================
+CARRITO PRO
+========================= */
+.carrito-container {
+    max-width: 1100px;
+    margin: 40px auto;
+}
+
+.titulo-carrito {
+    margin-bottom: 20px;
+}
+
+/* GRID */
+.carrito-grid {
+    display: grid;
+    gap: 20px;
+}
+
+/* CARD */
+.item-carrito {
+    background: white;
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    transition: 0.2s;
+}
+
+    .item-carrito:hover {
+        transform: translateY(-4px);
+    }
+
+/* HEADER */
+.item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.precio {
+    font-weight: bold;
+    color: #b30000;
+}
+
+/* BODY */
+.item-body {
+    margin: 10px 0;
+    font-size: 14px;
+    color: #555;
+}
+
+/* BOTÓN ELIMINAR */
+.btn-remove {
+    background: #ff4d4d;
+    border: none;
+    padding: 8px 12px;
+    color: white;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+    .btn-remove:hover {
+        background: #cc0000;
+    }
+
+/* FOOTER */
+.carrito-footer {
+    margin-top: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ACCIONES */
+.carrito-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-danger {
+    background: #444;
+    color: white;
+    padding: 10px 15px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+}
+
+    .btn-danger:hover {
+        background: #222;
+    }
+
+/* CARRITO VACÍO */
+.carrito-vacio {
+    text-align: center;
+    padding: 40px;
+    opacity: 0.7;
+}
+
+    .carrito-vacio i {
+        font-size: 40px;
+        margin-bottom: 10px;
+    }
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .carrito-footer {
+        flex-direction: column;
+        gap: 15px;
+    }
+}
+/* =========================
+MODAL PRO (COMO EL ORIGINAL)
+========================= */
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    justify-content: center;
+    align-items: center;
+}
+
+/* CONTENIDO */
+.modal-content {
+    background: white;
+    width: 400px;
+    max-width: 90%;
+    padding: 25px;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+    animation: modalFade 0.3s ease;
+}
+
+/* ANIMACIÓN */
+@keyframes modalFade {
+    from {
+        transform: translateY(-30px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* TEXTOS */
+.modal-content h2 {
+    margin-bottom: 10px;
+}
+
+.modal-content h4 {
+    margin-top: 15px;
+    color: #b30000;
+}
+
+.modal-content p {
+    margin-bottom: 10px;
+}
+
+/* CHECKBOX */
+.modal-content label {
+    display: block;
+    margin-bottom: 5px;
+    cursor: pointer;
+}
+
+/* TOTAL */
+.modal-content h3 {
+    margin-top: 15px;
+    font-weight: bold;
+}
+
+/* BOTONES */
+.modal-content button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+    /* CANCELAR */
+    .modal-content button:first-of-type {
+        background: #ccc;
+    }
+
+    /* AGREGAR */
+    .modal-content button:last-of-type {
+        background: #b30000;
+        color: white;
+    }
+
+        .modal-content button:last-of-type:hover {
+            background: #800000;
+        }
+
+.toast {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    background: #b30000;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: 0.3s;
+    z-index: 9999;
+}
+
+    .toast.show {
+        opacity: 1;
+        transform: translateY(0);
+    }

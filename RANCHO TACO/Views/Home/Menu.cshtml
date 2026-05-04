@@ -9,11 +9,12 @@
 <section class="top-products">
     <h2>Menú</h2>
 
+    ```
     @foreach (var grupo in Model.GroupBy(p => p.Categoria))
     {
         <div class="menu-section">
 
-            <h2>@grupo.Key</h2><br />
+            <h2>@grupo.Key</h2>
 
             <div class="products">
 
@@ -23,13 +24,12 @@
 
                         @if (!string.IsNullOrEmpty(item.ImagenUrl))
                         {
-                            <img src="@item.ImagenUrl" class="product-img" />
+                            <img src="@item.ImagenUrl" class="product-img" loading="lazy" />
                         }
 
                         <h3>@item.Nombre</h3>
                         <p>$@item.Precio</p>
 
-                        <!-- BOTÓN CORREGIDO (evita errores por comillas) -->
                         <button onclick="abrirModal(@item.Id, '@item.Nombre.Replace("'", "\\'")', @item.Precio, '@item.Categoria')">
                             Agregar
                         </button>
@@ -40,12 +40,16 @@
             </div>
         </div>
     }
+    ```
+
 </section>
 
 <!-- MODAL -->
+
 <div id="modal" class="modal">
     <div class="modal-content">
 
+        ```
         <h2 id="productoTitulo"></h2>
         <p id="precioBase"></p>
 
@@ -57,24 +61,20 @@
 
         <h3>Total: $<span id="total">0</span></h3>
 
-        <button onclick="cerrarModal()">Cancelar</button>
-        <button onclick="guardarCarrito()">Agregar</button>
+        <div class="modal-actions">
+            <button onclick="cerrarModal()">Cancelar</button>
+            <button onclick="guardarCarrito()">Agregar</button>
+        </div>
 
     </div>
+    ```
+
 </div>
 
-<!-- JAVASCRIPT -->
 <script>
 
-    // VARIABLE GLOBAL CORRECTA
-    let productoActual = {
-        id: 0,
-        nombre: "",
-        precio: 0,
-        categoria: ""
-    };
+    let productoActual = {};
 
-    // ABRIR MODAL
     function abrirModal(id, nombre, precio, categoria) {
 
         productoActual = { id, nombre, precio, categoria };
@@ -103,7 +103,6 @@
             ingredientes = ["Queso", "Crema", "Mantequilla"];
         }
 
-        // INGREDIENTES
         ingredientes.forEach(i => {
             contIng.innerHTML += `
                 <label>
@@ -113,7 +112,6 @@
             `;
         });
 
-        // EXTRAS
         extras.forEach(e => {
             contExt.innerHTML += `
                 <label>
@@ -126,9 +124,7 @@
         calcularTotal();
     }
 
-    // CALCULAR TOTAL
     function calcularTotal() {
-
         let total = productoActual.precio;
 
         document.querySelectorAll("#extras input:checked")
@@ -137,12 +133,10 @@
         document.getElementById("total").innerText = total;
     }
 
-    // CERRAR MODAL
     function cerrarModal() {
         document.getElementById("modal").style.display = "none";
     }
 
-    // GUARDAR EN CARRITO
     function guardarCarrito() {
 
         let ingredientes = [];
@@ -166,13 +160,55 @@
 
         let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
 
-        carrito.push(producto);
+        // 🔥 SISTEMA INTELIGENTE DE CANTIDAD
+        let existente = carrito.find(p =>
+            p.nombre === producto.nombre &&
+            JSON.stringify(p.ingredientes) === JSON.stringify(producto.ingredientes) &&
+            JSON.stringify(p.extras) === JSON.stringify(producto.extras)
+        );
+
+        if (existente) {
+            existente.cantidad += 1;
+        } else {
+            producto.cantidad = 1;
+            carrito.push(producto);
+        }
 
         sessionStorage.setItem("carrito", JSON.stringify(carrito));
 
-        alert("Producto agregado al carrito");
+        actualizarContadorCarrito();
+        mostrarToast("Producto agregado");
 
         cerrarModal();
+    }
+
+    // UX feedback
+    function mostrarToast(mensaje) {
+
+        let toast = document.createElement("div");
+        toast.className = "toast";
+        toast.innerText = mensaje;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => toast.classList.add("show"), 100);
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+            setTimeout(() => toast.remove(), 300);
+        }, 2000);
+    }
+
+    // contador navbar
+    function actualizarContadorCarrito() {
+        let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
+        let total = carrito.reduce((acc, p) => acc + p.cantidad, 0);
+
+        let contador = document.getElementById("contadorCarrito");
+        if (contador) {
+            contador.innerText = total;
+            contador.style.display = total > 0 ? "inline-block" : "none";
+        }
     }
 
 </script>

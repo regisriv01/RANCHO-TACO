@@ -1,19 +1,55 @@
 using Microsoft.EntityFrameworkCore;
-using RANCHO_TACO.Services;
+using Npgsql;
 using RanchoTaco.Data;
+using RANCHO_TACO.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddScoped<EmailService>();
-// 🔹 Servicios MVC
 builder.Services.AddControllersWithViews();
 
-// 🔥 Base de datos PostgreSQL (Render)
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(
-        builder.Configuration.GetConnectionString("DefaultConnection")
-    ));
+// =============================
+// 🔥 CONEXIÓN AUTO (Render + Local)
+// =============================
+string? databaseUrl = Environment.GetEnvironmentVariable("DATABASE_URL");
+string? appsettingsConn = builder.Configuration.GetConnectionString("DefaultConnection");
 
-// 🔹 Sesión (para login y carrito)
+string connectionString;
+
+if (!string.IsNullOrWhiteSpace(databaseUrl))
+{
+    // 👉 Render (o local si defines DATABASE_URL)
+    var uri = new Uri(databaseUrl);
+    var userInfo = uri.UserInfo.Split(':');
+
+    connectionString =
+        $"Host={uri.Host};" +
+        $"Port={uri.Port};" +
+        $"Database={uri.AbsolutePath.TrimStart('/')};" +
+        $"Username={userInfo[0]};" +
+        $"Password={userInfo[1]};" +
+        $"SSL Mode=Require;" +
+        $"Trust Server Certificate=true";
+}
+else if (!string.IsNullOrWhiteSpace(appsettingsConn))
+{
+    // 👉 Local con appsettings.json
+    connectionString = appsettingsConn;
+}
+else
+{
+    throw new Exception("No hay cadena de conexión. Define DATABASE_URL o DefaultConnection.");
+}
+
+// (Opcional) Log para verificar
+Console.WriteLine("DB Host: " + new NpgsqlConnectionStringBuilder(connectionString).Host);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseNpgsql(connectionString));
+
+// =============================
+// 🔹 SESIÓN
+// =============================
 builder.Services.AddSession(options =>
 {
     options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -23,7 +59,9 @@ builder.Services.AddSession(options =>
 
 var app = builder.Build();
 
-// 🔹 Manejo de errores
+// =============================
+// 🔹 MIDDLEWARE
+// =============================
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
@@ -32,23 +70,22 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
-
 app.UseRouting();
-
-// 🔹 Activar sesión
 app.UseSession();
 
-// 🔹 Rutas MVC
+// =============================
+// 🔹 RUTAS
+// =============================
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-// 🔥 Crear DB automáticamente (compatible con PostgreSQL)
+// =============================
+// 🔥 MIGRACIONES AUTOMÁTICAS
+// =============================
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-
-    // 👉 Usa Migrate en PostgreSQL (no EnsureCreated)
     db.Database.Migrate();
 }
 

@@ -6,55 +6,83 @@
 
 <section class="carrito-container">
 
-    <h2>Tu carrito</h2>
+    <h2 class="titulo-carrito">🛒 Tu carrito</h2>
 
-    <div id="carrito"></div>
+    <div id="carrito" class="carrito-grid"></div>
 
-    <h3>Total: $<span id="totalGeneral">0</span></h3>
+    <div class="carrito-footer">
 
-    <button onclick="vaciarCarrito()">Vaciar carrito</button>
+        <h3>Total: $<span id="totalGeneral">0</span></h3>
 
-</section><br />
-<a href="/Pago" class="btn-enviar">Ir a pagar</a>
+        <div class="carrito-actions">
+            <button class="btn-danger" onclick="vaciarCarrito()">Vaciar</button>
+            <a href="/Pago" class="btn-primary-pro">Ir a pagar</a>
+        </div>
+
+    </div>
+
+</section>
 
 <script>
-
-    // CARGAR CARRITO
     function cargarCarrito() {
 
         let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
-
         let contenedor = document.getElementById("carrito");
+
         contenedor.innerHTML = "";
 
         let total = 0;
+
+        if (carrito.length === 0) {
+            contenedor.innerHTML = `
+                <div class="carrito-vacio">
+                    <i class="fas fa-shopping-cart"></i>
+                    <p>Tu carrito está vacío</p>
+                </div>
+            `;
+            document.getElementById("totalGeneral").innerText = 0;
+            return;
+        }
 
         carrito.forEach((p, index) => {
 
             total += parseInt(p.precio);
 
-            contenedor.innerHTML += `
-                <div class="item-carrito">
+            let card = document.createElement("div");
+            card.className = "item-carrito card";
+
+            card.innerHTML = `
+                <div class="item-header">
                     <h4>${p.nombre}</h4>
-                    <p>$${p.precio}</p>
-
-                    <small>${p.ingredientes.join(", ")}</small><br>
-                    <small>${p.extras.join(", ")}</small><br>
-
-                    <button onclick="eliminar(${index})">Eliminar</button>
+                    <span class="precio">$${p.precio}</span>
                 </div>
+
+                <div class="item-body">
+                    <p><strong>Ingredientes:</strong> ${p.ingredientes.join(", ")}</p>
+                    <p><strong>Extras:</strong> ${p.extras.join(", ") || "Ninguno"}</p>
+                </div>
+
+                <button class="btn-remove" data-index="${index}">
+                    <i class="fas fa-trash"></i> Eliminar
+                </button>
             `;
+
+            contenedor.appendChild(card);
         });
 
         document.getElementById("totalGeneral").innerText = total;
+
+        // eventos eliminar
+        document.querySelectorAll(".btn-remove").forEach(btn => {
+            btn.addEventListener("click", () => eliminar(btn.dataset.index));
+        });
     }
 
-    // ELIMINAR PRODUCTO
+    // ELIMINAR
     function eliminar(index) {
         let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
 
         carrito.splice(index, 1);
-
         sessionStorage.setItem("carrito", JSON.stringify(carrito));
 
         cargarCarrito();
@@ -66,7 +94,6 @@
         cargarCarrito();
     }
 
-    // INICIAL
-    cargarCarrito();
-
+    // INIT
+    document.addEventListener("DOMContentLoaded", cargarCarrito);
 </script>
