@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="~/css/site.css" />
 
 <!-- HERO -->
+
 <header class="hero-slider">
     <div class="slider-container">
         <img src="~/images/promos/promo1.png" class="slide active">
@@ -17,33 +18,39 @@
 </header>
 
 <!-- PRODUCTOS -->
+
 <section class="top-products">
     <h2>Más vendidos</h2>
 
+    
     <div class="products">
         @foreach (var item in Model)
         {
             <div class="product">
 
-                <img src="@item.ImagenUrl" class="product-img" loading="lazy"/>
+                <img src="@item.ImagenUrl" class="product-img" loading="lazy" />
 
                 <h3>@item.Nombre</h3>
                 <p>$@item.Precio</p>
 
-                <!-- BOTÓN NUEVO -->
-                <button onclick="abrirModal(@item.Id, '@item.Nombre', @item.Precio, '@item.Categoria')">
+                <!-- FIX COMILLAS -->
+                <button onclick="abrirModal(@item.Id, '@item.Nombre.Replace("'", "\\'")', @item.Precio, '@item.Categoria')">
                     Agregar
                 </button>
 
             </div>
         }
     </div>
+    
+
 </section>
 
-<!-- RESEÑAS DINÁMICAS -->
+<!-- RESEÑAS -->
+
 <section class="reviews">
     <h2>Reseñas</h2>
 
+    
     <div class="review-slider">
         @if (ViewBag.Resenas != null)
         {
@@ -67,19 +74,23 @@
             <p>No hay reseñas todavía.</p>
         }
     </div>
+    
+
 </section>
 
 <!-- UBICACIÓN -->
+
 <section class="location">
     <h2>Ubicación</h2>
-    <iframe src="https://maps.google.com/maps?q=Calle%20Presa%20Del%20Azucar%2C%20Reynosa%2C%20Tamaulipas&output=embed">
-    </iframe>
+    <iframe src="https://maps.google.com/maps?q=Calle%20Presa%20Del%20Azucar%2C%20Reynosa%2C%20Tamaulipas&output=embed"></iframe>
 </section>
 
 <!-- MODAL -->
+
 <div id="modal" class="modal">
     <div class="modal-content">
 
+        
         <h2 id="productoTitulo"></h2>
         <p id="precioBase"></p>
 
@@ -95,9 +106,12 @@
         <button onclick="guardarCarrito()">Agregar</button>
 
     </div>
+    
+
 </div>
 
-<!-- SCRIPT SLIDER HERO -->
+<!-- SCRIPT SLIDER -->
+
 <script>
     let slides = document.querySelectorAll(".slider-container img");
     let index = 0;
@@ -106,13 +120,12 @@
         slides.forEach(s => s.classList.remove("active"));
         slides[index].classList.add("active");
 
-        index++;
-        if (index >= slides.length) index = 0;
-
+        index = (index + 1) % slides.length;
     }, 5000);
 </script>
 
 <!-- SCRIPT RESEÑAS -->
+
 <script>
     let reviewIndex = 0;
 
@@ -131,8 +144,10 @@
     }, 3000);
 </script>
 
-<!-- SCRIPT MODAL + CARRITO -->
+<!-- SCRIPT MODAL + CARRITO PRO -->
+
 <script>
+
     let productoActual = {};
 
     function abrirModal(id, nombre, precio, categoria) {
@@ -208,9 +223,10 @@
         document.querySelectorAll("#extras input:checked")
             .forEach(e => extras.push(e.parentElement.innerText));
 
-        let total = document.getElementById("total").innerText;
+        let total = parseInt(document.getElementById("total").innerText);
 
         let producto = {
+            id: productoActual.id,
             nombre: productoActual.nombre,
             precio: total,
             ingredientes,
@@ -218,12 +234,41 @@
         };
 
         let carrito = JSON.parse(sessionStorage.getItem("carrito")) || [];
-        carrito.push(producto);
+
+        let existente = carrito.find(p =>
+            p.nombre === producto.nombre &&
+            JSON.stringify(p.ingredientes) === JSON.stringify(producto.ingredientes) &&
+            JSON.stringify(p.extras) === JSON.stringify(producto.extras)
+        );
+
+        if (existente) {
+            existente.cantidad += 1;
+        } else {
+            producto.cantidad = 1;
+            carrito.push(producto);
+        }
 
         sessionStorage.setItem("carrito", JSON.stringify(carrito));
 
-        console.log(carrito);
+        mostrarToast("Producto agregado");
 
         cerrarModal();
     }
+
+    function mostrarToast(mensaje) {
+
+        let toast = document.createElement("div");
+        toast.className = "toast";
+        toast.innerText = mensaje;
+
+        document.body.appendChild(toast);
+
+        setTimeout(() => toast.classList.add("show"), 100);
+
+        setTimeout(() => {
+            toast.classList.remove("show");
+            setTimeout(() => toast.remove(), 300);
+        }, 2000);
+    }
+
 </script>
