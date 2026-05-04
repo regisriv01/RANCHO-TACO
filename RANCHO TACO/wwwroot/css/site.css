@@ -1,6 +1,10 @@
 /* ======================================================
-RESET + BASE (FIX FOOTER + MOBILE)
+RESET + BASE
 ====================================================== */
+* {
+    box-sizing: border-box;
+}
+
 html, body {
     height: 100%;
     margin: 0;
@@ -12,74 +16,54 @@ html, body {
 body {
     display: flex;
     flex-direction: column;
+    min-height: 100vh;
 }
 
-.container {
+main, .main-container {
     flex: 1;
+}
+
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    width: 100%;
 }
 
 /* ======================================================
 NAVBAR
 ====================================================== */
 .navbar {
-    background: rgba(139, 0, 0, 0.95) !important;
-    backdrop-filter: blur(10px);
+    background: #8b0000 !important;
     padding: 10px 20px;
     position: sticky;
     top: 0;
     z-index: 1000;
 }
 
+    .navbar .container-fluid {
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
     .navbar .nav-link {
         color: white !important;
         font-weight: 500;
-        transition: 0.3s;
     }
-
-        .navbar .nav-link:hover {
-            opacity: 0.8;
-        }
 
 .navbar-nav {
     gap: 15px;
 }
 
-.navbar-toggler {
-    border: none;
-}
-
-/* ======================================================
-LOGO
-====================================================== */
 .logo-navbar {
     height: 45px;
-    transition: 0.3s;
-}
-
-    .logo-navbar:hover {
-        transform: scale(1.05);
-    }
-
-/* ======================================================
-CARRITO BADGE
-====================================================== */
-.badge-carrito {
-    position: absolute;
-    top: -5px;
-    right: -10px;
-    background: white;
-    color: #8b0000;
-    font-size: 10px;
-    padding: 3px 6px;
-    border-radius: 50%;
-    font-weight: bold;
 }
 
 /* ======================================================
 SLIDER
 ====================================================== */
 .hero-slider {
-    margin: 20px;
+    margin: 20px auto;
+    max-width: 1200px;
 }
 
 .slider-container {
@@ -87,7 +71,6 @@ SLIDER
     height: 300px;
     overflow: hidden;
     border-radius: 25px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.3);
 }
 
     .slider-container img {
@@ -96,7 +79,7 @@ SLIDER
         height: 100%;
         object-fit: cover;
         opacity: 0;
-        transition: opacity 1s ease-in-out;
+        transition: opacity .5s;
     }
 
         .slider-container img.active {
@@ -110,259 +93,155 @@ PRODUCTOS
     background: rgba(107, 88, 72, 0.95);
     color: white;
     padding: 30px;
-    margin: 20px;
+    margin: 20px auto;
     border-radius: 25px;
+    max-width: 1200px;
 }
 
-.products {
-    display: flex;
-    gap: 20px;
-    flex-wrap: wrap;
-    justify-content: center;
-}
+    .top-products .products,
+    .menu-section .products {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, 250px);
+        justify-content: start;
+        gap: 25px;
+    }
 
-/* ======================================================
-TARJETAS
-====================================================== */
 .product {
+    display: flex;
+    flex-direction: column;
     background: linear-gradient(145deg, #8b0000, #a30000);
     border-radius: 20px;
-    width: 220px;
     padding: 15px;
     text-align: center;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.4);
-    transition: 0.3s;
+    transition: .3s;
 }
 
     .product:hover {
-        transform: translateY(-8px);
+        transform: translateY(-5px);
     }
 
-.product-img {
-    width: 100%;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 15px;
-}
-
-.product button {
-    background: white;
-    color: #8b0000;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    border-radius: 12px;
-    margin-top: 10px;
-    font-weight: bold;
-}
+    .product img {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 15px;
+    }
 
 /* ======================================================
 CONTACTO
 ====================================================== */
 .contact-wrapper {
-    display: flex;
-    gap: 30px;
-    justify-content: center;
-    padding: 40px 20px;
-    flex-wrap: wrap;
+    max-width: 1100px;
+    margin: 40px auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
 }
 
 .contact-card {
     background: white;
     padding: 25px;
     border-radius: 20px;
-    width: 100%;
-    max-width: 420px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
-
-/* ======================================================
-REDES
-====================================================== */
-.redes-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.red {
-    display: flex;
-    justify-content: center;
-    padding: 12px;
-    border-radius: 12px;
-    color: white;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.social-instagram {
-    background: linear-gradient(45deg, #f58529, #dd2a7b, #8134af);
-}
-
-.social-whatsapp {
-    background: #25d366;
-}
-
-/* ======================================================
-ACERCA
-====================================================== */
-.acerca-container {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-}
-
-.acerca-card {
-    display: flex;
-    gap: 20px;
-    background: white;
-    border-radius: 20px;
-    padding: 20px;
-    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-    align-items: center;
-}
-
-.acerca-img img {
-    width: 180px;
-    border-radius: 15px;
-}
-
-.acerca-text h2 {
-    color: #8b0000;
-}
-
-/* ======================================================
-PAGOS
-====================================================== */
-.pago-container {
-    background: rgba(255,255,255,0.95);
-    margin: 20px auto;
-    padding: 25px;
-    border-radius: 20px;
-    max-width: 600px;
-    box-shadow: 0 15px 35px rgba(0,0,0,0.25);
-}
-
-    .pago-container h2 {
-        text-align: center;
-        color: #8b0000;
-    }
-
-    .pago-container h3 {
-        text-align: right;
-        margin-top: 15px;
-    }
-
-/* RESUMEN */
-.item-carrito {
-    background: #f5f5f5;
-    padding: 12px;
-    border-radius: 10px;
-    margin-bottom: 10px;
-    transition: 0.3s;
-}
-
-    .item-carrito:hover {
-        transform: scale(1.02);
-    }
-
-    .item-carrito small {
-        display: block;
-        color: gray;
-    }
-
-/* FORMULARIO */
-.pago-container form {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 15px;
-}
-
-.pago-container input,
-.pago-container select,
-.pago-container textarea {
-    padding: 12px;
-    border-radius: 10px;
-    border: 1px solid #ccc;
-}
-
-/* DIRECCIÓN */
-.direccion-box {
-    display: none;
-    background: #f3f3f3;
-    padding: 15px;
-    border-radius: 12px;
-}
-
-/* BOTÓN */
-.pago-container button {
-    background: linear-gradient(145deg, #8b0000, #a30000);
-    color: white;
-    padding: 14px;
-    border-radius: 12px;
-    border: none;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-    .pago-container button:hover {
-        transform: scale(1.03);
-    }
 
 /* ======================================================
 FOOTER
 ====================================================== */
 .footer {
-    background: #8b0000;
+    background: linear-gradient(145deg, #8b0000, #a30000);
     color: white;
     text-align: center;
-    padding: 10px;
+    padding: 12px;
 }
+
+/* ======================================================
+ACERCA (🔥 FIX REAL Y DEFINITIVO)
+====================================================== */
+
+.acerca-container {
+    max-width: 1100px;
+    margin: 40px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+}
+
+/* CARD CON GRID REAL */
+.acerca-card {
+    display: grid;
+    grid-template-columns: 180px 1fr; /* 🔥 imagen izquierda */
+    align-items: center;
+    gap: 30px;
+    background: #f5f5f5;
+    padding: 35px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    transition: 0.3s;
+}
+
+    .acerca-card:hover {
+        transform: translateY(-6px);
+    }
+
+/* =========================
+IMAGEN CUADRADA PERFECTA
+========================= */
+.acerca-img {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .acerca-img img {
+        width: 140px;
+        height: 140px; /* 🔥 misma altura y ancho = cuadrado */
+        object-fit: contain; /* 🔥 recorta sin deformar */
+        border-radius: 12px; /* 🔥 bordes suaves (opcional) */
+        background: white;
+        padding: 6px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+    }
+/* TEXTO */
+.acerca-text {
+    width: 100%;
+}
+
+    .acerca-text h2 {
+        margin-bottom: 10px;
+        font-size: 26px;
+    }
+
+    .acerca-text h4 {
+        color: #8b0000;
+        margin-top: 12px;
+    }
+
+    .acerca-text p {
+        color: #333;
+        line-height: 1.6;
+    }
 
 /* ======================================================
 RESPONSIVE
 ====================================================== */
 @media (max-width: 768px) {
 
-   
-    .logo-navbar {
-        height: 35px;
+    .top-products .products,
+    .menu-section .products {
+        grid-template-columns: 1fr;
     }
 
-    .hero-slider {
-        margin: 10px;
-    }
-
-    .slider-container {
-        height: 200px;
-    }
-
-    .top-products {
-        margin: 10px;
-        padding: 20px;
-    }
-
-    .product {
-        width: 100%;
+    .contact-wrapper {
+        grid-template-columns: 1fr;
     }
 
     .acerca-card {
-        flex-direction: column;
+        grid-template-columns: 1fr;
         text-align: center;
     }
 
     .acerca-img img {
         width: 120px;
-    }
-
-    .contact-wrapper {
-        padding: 20px;
-    }
-
-    .pago-container {
-        margin: 10px;
-        padding: 20px;
+        height: 120px;
     }
 }

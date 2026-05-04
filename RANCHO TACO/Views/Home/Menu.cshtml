@@ -23,7 +23,7 @@
 
                         @if (!string.IsNullOrEmpty(item.ImagenUrl))
                         {
-                            <img src="@item.ImagenUrl" class="product-img" />
+                            <img src="@item.ImagenUrl" class="product-img" loading="lazy"/>
                         }
 
                         <h3>@item.Nombre</h3>
